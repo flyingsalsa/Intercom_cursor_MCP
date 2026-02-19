@@ -66,12 +66,6 @@ npm run build
 
 ### 4. Configure Cursor to use this MCP server
 
-Copy the example MCP config and point Cursor at this project:
-
-```bash
-cp .cursor/mcp.example.json .cursor/mcp.json
-```
-
 Edit `.cursor/mcp.json` so the server runs from this repo (use an absolute path to `dist/index.js` if needed) and that `env` includes your real `INTERCOM_API_KEY` and `INTERCOM_ADMIN_ID`. Example:
 
 ```json
@@ -80,11 +74,6 @@ Edit `.cursor/mcp.json` so the server runs from this repo (use an absolute path 
     "intercom": {
       "command": "node",
       "args": ["/path/to/Cursor MCP/dist/index.js"],
-      "env": {
-        "INTERCOM_API_KEY": "your_intercom_api_token_here",
-        "INTERCOM_ADMIN_ID": "your_admin_id_here",
-        "TEMPLATE_DOC_PATH": "./templates/responses.md"
-      }
     }
   }
 }
