@@ -55,7 +55,7 @@ Edit `.env`:
 | Variable | Description |
 |----------|-------------|
 | `INTERCOM_API_KEY` | Your Intercom API token (required). |
-| `INTERCOM_ADMIN_ID` | Intercom admin/agent ID used as the author of replies and notes (required). |
+| `INTERCOM_ADMIN_ID` | Intercom [admin/agent ID](https://developers.intercom.com/docs/references/1.0/rest-api/admins/view-an-admin) used as the author of replies and notes (required). |
 | `TEMPLATE_DOC_PATH` | Path to your response templates file (default: `./templates/responses.md`). |
 
 ### 3. Build
