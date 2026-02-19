@@ -49,9 +49,58 @@ export interface ConversationListResponse {
   pages: { next?: { starting_after: string }; per_page: number; total_pages: number };
 }
 
+/** Contact model from Intercom Contacts API (device, version, location, etc.) */
+export interface IntercomContact {
+  type: string;
+  id: string;
+  workspace_id?: string;
+  external_id: string | null;
+  role: string;
+  email: string | null;
+  email_domain?: string | null;
+  phone: string | null;
+  name: string | null;
+  avatar?: string | null;
+  owner_id?: number | null;
+  created_at: number;
+  updated_at: number;
+  signed_up_at: number | null;
+  last_seen_at: number | null;
+  last_replied_at: number | null;
+  last_contacted_at: number | null;
+  browser?: string | null;
+  browser_version?: string | null;
+  browser_language?: string | null;
+  os?: string | null;
+  location?: {
+    type: string;
+    country?: string;
+    region?: string;
+    city?: string;
+    country_code?: string;
+    continent_code?: string;
+  } | null;
+  android_app_name?: string | null;
+  android_app_version?: string | null;
+  android_device?: string | null;
+  android_os_version?: string | null;
+  android_sdk_version?: string | null;
+  android_last_seen_at?: number | null;
+  ios_app_name?: string | null;
+  ios_app_version?: string | null;
+  ios_device?: string | null;
+  ios_os_version?: string | null;
+  ios_sdk_version?: string | null;
+  ios_last_seen_at?: number | null;
+  custom_attributes?: Record<string, unknown>;
+  tags?: { data: Array<{ type: string; id: string }> };
+  [key: string]: unknown;
+}
+
 export function createIntercomClient(apiKey: string): {
   searchConversations: (params: ConversationSearchParams) => Promise<ConversationListResponse>;
   getConversation: (id: string) => Promise<IntercomConversation>;
+  getContact: (id: string) => Promise<IntercomContact>;
   replyToConversation: (params: ReplyParams) => Promise<unknown>;
   listConversations: (updatedAfter?: number, perPage?: number, startingAfter?: string) => Promise<ConversationListResponse>;
 } {
@@ -89,6 +138,11 @@ export function createIntercomClient(apiKey: string): {
     return res.data as IntercomConversation;
   }
 
+  async function getContact(id: string): Promise<IntercomContact> {
+    const res = await http.get(`/contacts/${id}`);
+    return res.data as IntercomContact;
+  }
+
   async function replyToConversation(params: ReplyParams): Promise<unknown> {
     const res = await http.post(`/conversations/${params.conversationId}/reply`, {
       message_type: params.messageType,
@@ -117,5 +171,5 @@ export function createIntercomClient(apiKey: string): {
     return res.data as ConversationListResponse;
   }
 
-  return { searchConversations, getConversation, replyToConversation, listConversations };
+  return { searchConversations, getConversation, getContact, replyToConversation, listConversations };
 }

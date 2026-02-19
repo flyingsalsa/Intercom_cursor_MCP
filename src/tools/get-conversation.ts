@@ -36,7 +36,11 @@ export async function getConversation(input: GetConversationInput, apiKey: strin
     created_at: new Date(conv.created_at * 1000).toISOString(),
     updated_at: new Date(conv.updated_at * 1000).toISOString(),
     contact: conv.contacts.contacts[0]
-      ? { name: conv.contacts.contacts[0].name, email: conv.contacts.contacts[0].email }
+      ? {
+          id: conv.contacts.contacts[0].id,
+          name: conv.contacts.contacts[0].name,
+          email: conv.contacts.contacts[0].email,
+        }
       : null,
     messages,
     stats: conv.statistics ?? null,

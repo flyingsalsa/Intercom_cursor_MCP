@@ -1,16 +1,11 @@
-import path from "node:path";
-import { fileURLToPath } from "node:url";
-import dotenv from "dotenv";
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-dotenv.config({ path: path.resolve(__dirname, "..", ".env") });
-
+import "dotenv/config";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
 
 import { searchConversations } from "./tools/search-conversations.js";
 import { getConversation } from "./tools/get-conversation.js";
+import { getContact } from "./tools/get-contact.js";
 import { getUnrepliedConversations } from "./tools/get-unreplied-conversations.js";
 import { getNewMessages, getNewMessagesSchema } from "./tools/new-messages.js";
 import { getTemplates, getTemplatesSchema } from "./tools/get-templates.js";
@@ -61,6 +56,18 @@ server.tool(
   },
   async (args) => {
     const result = await getConversation(args, INTERCOM_API_KEY);
+    return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+  },
+);
+
+server.tool(
+  "get_contact",
+  "Fetch full contact data for an Intercom contact: ID, external_id, role, name, email, phone; device and app version (browser, OS, Android/iOS app/device/OS/SDK); location; timestamps; custom_attributes; tags. Often used to look for wallet addresses (e.g. starting with 0x) in custom_attributes or other fields. Use the contact ID from a conversation (e.g. conversation contact id or source author).",
+  {
+    contact_id: z.string().describe("The Intercom contact ID"),
+  },
+  async (args) => {
+    const result = await getContact(args, INTERCOM_API_KEY);
     return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
   },
 );
