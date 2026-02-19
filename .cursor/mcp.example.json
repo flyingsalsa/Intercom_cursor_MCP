@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "intercom": {
+      "command": "node",
+      "args": ["dist/index.js"],
+      "env": {
+        "INTERCOM_API_KEY": "your_intercom_api_token_here",
+        "INTERCOM_ADMIN_ID": "your_admin_id_here",
+        "TEMPLATE_DOC_PATH": "./templates/responses.md"
+      }
+    }
+  }
+}
