@@ -8,7 +8,6 @@ import { getConversation } from "./tools/get-conversation.js";
 import { getContact } from "./tools/get-contact.js";
 import { getUnrepliedConversations } from "./tools/get-unreplied-conversations.js";
 import { getNewMessages, getNewMessagesSchema } from "./tools/new-messages.js";
-import { getTemplates, getTemplatesSchema } from "./tools/get-templates.js";
 import { draftReply, draftReplySchema } from "./tools/draft-reply.js";
 import { sendReply, sendReplySchema } from "./tools/send-reply.js";
 
@@ -93,16 +92,6 @@ server.tool(
   async (args) => {
     const result = await getNewMessages(args, INTERCOM_API_KEY);
     return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
-  },
-);
-
-server.tool(
-  "get_templates",
-  "Read the full template document (responses.md). Returns the entire file including agent persona, primary role, vocabulary rules, and all workflow templates. Use this when suggesting replies to Intercom conversations.",
-  {},
-  async () => {
-    const result = await getTemplates({}, TEMPLATE_DOC_PATH);
-    return { content: [{ type: "text", text: result }] };
   },
 );
 
