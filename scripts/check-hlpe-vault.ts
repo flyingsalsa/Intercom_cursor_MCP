@@ -3,7 +3,9 @@
  *
  * Queries all relevant APIs for a given wallet to see what the user would see
  * on the HLPe vault page, specifically for withdrawal availability.
- *
+ * Install dependencies:
+ *   npm install @augustdigital/sdk viem  
+ *   npm install -D tsx
  * Usage:
  *   npx tsx scripts/check-hlpe-vault.ts <wallet_address>
  *
