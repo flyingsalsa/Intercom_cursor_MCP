@@ -1,6 +1,6 @@
 # Intercom MCP Server
 
-An [MCP](https://modelcontextprotocol.io/) (Model Context Protocol) server that connects [Cursor](https://cursor.com/) to Intercom. Use it from Cursor to list conversations, read threads, draft and send replies, and pull in your support response templates (Do remember to include your own response.md)
+An [MCP](https://modelcontextprotocol.io/) (Model Context Protocol) server that connects [Cursor](https://cursor.com/) to Intercom. Use it from Cursor to list conversations, read threads, draft and send replies, and pull in your support response templates (Do remember to include your own response.md and change the rules as you see fit)
 
 ## Tools
 
