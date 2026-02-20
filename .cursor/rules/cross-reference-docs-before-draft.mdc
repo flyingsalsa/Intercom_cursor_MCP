@@ -1,0 +1,18 @@
+---
+description: Cross-reference docs before drafting Intercom/support replies
+alwaysApply: true
+---
+
+# Cross-Reference Docs Before Drafting
+
+When drafting Intercom replies or customer support responses for BasedApp/HyENA:
+
+1. **Check `templates/responses.md` first**—use its workflows and templates if they cover the question.
+2. **Only if responses.md doesn't have the answer**, cross-reference the external docs. Use web search or fetch to look up:
+   - HyENA: https://docs.hyena.trade/
+   - BasedApp: https://basedapp.gitbook.io/docs
+   - Hyperliquid: https://hyperliquid.gitbook.io/hyperliquid-docs
+
+3. **Cite sources** when quoting APY, fees, TP/SL, or other specifics—include the link.
+
+4. **If the answer isn't in the docs**, say: "I need to check with the dev team." Do not guess.
