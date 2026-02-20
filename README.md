@@ -1,6 +1,6 @@
 # Intercom MCP Server
 
-An [MCP](https://modelcontextprotocol.io/) (Model Context Protocol) server that connects [Cursor](https://cursor.com/) to Intercom. Use it from Cursor to list conversations, read threads, draft and send replies, and pull in your support response templates (Do remember to include your own response.md)
+An [MCP](https://modelcontextprotocol.io/) (Model Context Protocol) server that connects [Cursor](https://cursor.com/) to Intercom. Use it from Cursor to list conversations, read threads, and draft and send replies. Keep your support templates in `templates/responses.md`; a Cursor rule instructs the AI to use them when drafting.
 
 ## Tools
 
@@ -15,8 +15,6 @@ Each tool is exposed to Cursor (and any MCP client) when this server is running.
 - **get_unreplied_conversations** — Returns open conversations where the **last message is from the customer** (i.e. no agent reply yet). Helps prioritize which conversations need a response. You can cap how many open conversations are fetched per page.
 
 - **get_new_messages** — Poll for new or updated conversations since the last time you checked. Uses a high-water mark: the first call returns conversations from the last hour; later calls return only newer activity. Optional `reset` flag resets the mark to “now”. Useful for “what’s new since I last looked?” workflows.
-
-- **get_templates** — Reads your support template document (e.g. `templates/responses.md`) and returns the full text: agent persona, vocabulary rules, and workflow templates. Use this so the AI can suggest or draft replies that match your tone and playbooks.
 
 ### Draft (internal note)
 
@@ -94,13 +92,7 @@ Drafts created with **draft_reply** appear in Intercom as internal notes and end
 
 ## Response templates
 
-The **get_templates** tool reads `templates/responses.md` (or the path in `TEMPLATE_DOC_PATH`). Use it to store:
-
-- Support agent persona and tone
-- Vocabulary rules (e.g. trading vs gambling wording)
-- Workflows for common cases (deposits, payouts, KYC, bugs, etc.)
-
-The AI can use this when suggesting or drafting replies so they match your style and playbooks.
+Keep your support playbooks in `templates/responses.md`: agent persona, vocabulary rules, and workflows for common cases (deposits, payouts, KYC, bugs, etc.). The project includes a Cursor rule that tells the AI to check this file when drafting Intercom replies.
 
 ## Project structure
 
@@ -115,7 +107,6 @@ The AI can use this when suggesting or drafting replies so they match your style
 │       ├── get-conversation.ts
 │       ├── get-unreplied-conversations.ts
 │       ├── get-new-messages.ts
-│       ├── get-templates.ts
 │       └── search-conversations.ts
 ├── templates/
 │   └── responses.md          # Support templates (persona, workflows)
