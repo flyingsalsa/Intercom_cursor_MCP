@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { createIntercomClient } from "../lib/intercom-client.js";
+import { createIntercomClient, PartAttachment } from "../lib/intercom-client.js";
 
 const CUSTOMER_AUTHOR_TYPES = ["user", "lead"];
 
@@ -31,7 +31,7 @@ export async function getUnrepliedConversations(input: GetUnrepliedConversations
     title: string | null;
     created_at: string;
     updated_at: string;
-    last_message: { author: string; author_type: string; body: string; created_at: string };
+    last_message: { author: string; author_type: string; body: string; created_at: string; attachments?: Array<{ name: string | null; url: string; content_type: string | null }> };
     preview: string;
   }> = [];
 
@@ -72,33 +72,49 @@ export async function getUnrepliedConversations(input: GetUnrepliedConversations
   };
 }
 
+function formatAttachments(attachments?: PartAttachment[]) {
+  if (!attachments || attachments.length === 0) return undefined;
+  return attachments.map((a) => ({
+    name: a.name ?? null,
+    url: a.url,
+    content_type: a.content_type ?? null,
+  }));
+}
+
 function buildMessageList(conv: {
-  source: { body: string; author: { type: string; name: string } };
+  source: { body: string; author: { type: string; name: string }; attachments?: PartAttachment[] };
   created_at: number;
   conversation_parts?: {
     conversation_parts: Array<{
       body: string | null;
       author: { type: string; name: string };
       created_at: number;
+      attachments?: PartAttachment[];
     }>;
   };
-}): Array<{ author: string; author_type: string; body: string; created_at: string }> {
+}): Array<{ author: string; author_type: string; body: string; created_at: string; attachments?: Array<{ name: string | null; url: string; content_type: string | null }> }> {
   const parts = conv.conversation_parts?.conversation_parts ?? [];
+  const sourceAttachments = formatAttachments(conv.source.attachments);
   const list = [
     {
       author: conv.source.author.name ?? conv.source.author.type,
       author_type: conv.source.author.type,
       body: conv.source.body ?? "",
       created_at: new Date(conv.created_at * 1000).toISOString(),
+      ...(sourceAttachments && { attachments: sourceAttachments }),
     },
     ...parts
-      .filter((p) => p.body)
-      .map((p) => ({
-        author: p.author.name ?? p.author.type,
-        author_type: p.author.type,
-        body: p.body ?? "",
-        created_at: new Date(p.created_at * 1000).toISOString(),
-      })),
+      .filter((p) => p.body || (p.attachments && p.attachments.length > 0))
+      .map((p) => {
+        const partAttachments = formatAttachments(p.attachments);
+        return {
+          author: p.author.name ?? p.author.type,
+          author_type: p.author.type,
+          body: p.body ?? "",
+          created_at: new Date(p.created_at * 1000).toISOString(),
+          ...(partAttachments && { attachments: partAttachments }),
+        };
+      }),
   ];
   return list;
 }

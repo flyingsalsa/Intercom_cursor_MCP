@@ -21,6 +21,16 @@ export interface ReplyParams {
   adminId: string;
 }
 
+export interface PartAttachment {
+  type?: string;
+  name?: string;
+  url: string;
+  content_type?: string;
+  filesize?: number;
+  width?: number;
+  height?: number;
+}
+
 export interface IntercomConversation {
   id: string;
   title: string | null;
@@ -29,7 +39,7 @@ export interface IntercomConversation {
   state: string;
   open: boolean;
   read: boolean;
-  source: { type: string; body: string; author: { type: string; name: string; email: string } };
+  source: { type: string; body: string; author: { type: string; name: string; email: string }; attachments?: PartAttachment[] };
   contacts: { contacts: Array<{ id: string; name: string; email: string }> };
   conversation_parts?: {
     conversation_parts: Array<{
@@ -38,6 +48,7 @@ export interface IntercomConversation {
       body: string | null;
       author: { type: string; name: string; email: string };
       created_at: number;
+      attachments?: PartAttachment[];
     }>;
   };
   statistics?: { time_to_first_human_reply: number | null; count_reopens: number };
@@ -132,9 +143,7 @@ export function createIntercomClient(apiKey: string): {
   }
 
   async function getConversation(id: string): Promise<IntercomConversation> {
-    const res = await http.get(`/conversations/${id}`, {
-      params: { display_as: "plaintext" },
-    });
+    const res = await http.get(`/conversations/${id}`);
     return res.data as IntercomConversation;
   }
 

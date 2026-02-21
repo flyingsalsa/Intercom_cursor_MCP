@@ -1,0 +1,160 @@
+{
+  "id": "215473139714873",
+  "title": null,
+  "state": "open",
+  "open": true,
+  "created_at": "2026-02-17T18:20:07.000Z",
+  "updated_at": "2026-02-21T10:47:56.000Z",
+  "contact": {
+    "id": "6939ba63eb09fd821fa5227f"
+  },
+  "messages": [
+    {
+      "author": "Pal",
+      "author_type": "admin",
+      "body": "",
+      "created_at": "2026-02-17T18:20:07.000Z"
+    },
+    {
+      "author": "Benji",
+      "author_type": "admin",
+      "body": "<p class=\"no-margin\">Sorry what is your query?</p>",
+      "created_at": "2026-02-18T17:40:55.000Z"
+    },
+    {
+      "author": "user",
+      "author_type": "user",
+      "body": "<p>I can't verify myself for the based card and I want to start using it!</p>",
+      "created_at": "2026-02-18T17:47:37.000Z"
+    },
+    {
+      "author": "Benji",
+      "author_type": "admin",
+      "body": "<p class=\"no-margin\">Are you saying you want to create a new KYC to get a card?</p>",
+      "created_at": "2026-02-18T17:54:03.000Z"
+    },
+    {
+      "author": "Benji",
+      "author_type": "admin",
+      "body": "<p class=\"no-margin\">Hi just checking in on this, thanks!</p>",
+      "created_at": "2026-02-19T02:18:35.000Z"
+    },
+    {
+      "author": "user",
+      "author_type": "user",
+      "body": "<p>I mean I want to do my KYC and have my card</p>",
+      "created_at": "2026-02-19T02:35:33.000Z"
+    },
+    {
+      "author": "Benji",
+      "author_type": "admin",
+      "body": "<p class=\"no-margin\">Just to clarify are you saying then you are trying to do KYC or already received your card and want to activate it?</p>",
+      "created_at": "2026-02-19T02:41:17.000Z"
+    },
+    {
+      "author": "Benji",
+      "author_type": "admin",
+      "body": "<p class=\"no-margin\">-adele</p>",
+      "created_at": "2026-02-19T02:41:21.000Z"
+    },
+    {
+      "author": "Benji",
+      "author_type": "admin",
+      "body": "<div class=\"intercom-container\"><img src=\"https://downloads.intercomcdn.com/i/o/gfpnvl6f/2081343575/569ac40a614543db41480e656b5d/image.png?expires=1771690500&amp;signature=52cce17567fafa28b0fa86f5b74e4b7481fff17fff934f1ebd4592fdc4d88578&amp;req=diAvF8p6noRYXPMW1HO4zR%2FLNxFwPozRj9LKGzRtYSafjBpqiKuDPPLtD2EH%0AVYEKPEH%2FGEKPtLgE110%3D%0A\"></div><p class=\"no-margin\">-roy reseted<br>​</p>",
+      "created_at": "2026-02-19T06:30:05.000Z"
+    },
+    {
+      "author": "Benji",
+      "author_type": "admin",
+      "body": "<p class=\"no-margin\">Hi your KYC as been reseted do try again<br><br>The reason for the rejection is that your address is too little.<br><br>Do let us know if you still have any issue with KYC if not I will close the ticket</p>",
+      "created_at": "2026-02-19T06:31:00.000Z"
+    },
+    {
+      "author": "Benji",
+      "author_type": "admin",
+      "body": "<p class=\"no-margin\">-roy clos it</p>",
+      "created_at": "2026-02-19T06:31:06.000Z"
+    },
+    {
+      "author": "user",
+      "author_type": "user",
+      "body": "<p>It won't let me do it again</p>",
+      "created_at": "2026-02-19T15:23:19.000Z"
+    },
+    {
+      "author": "Benji",
+      "author_type": "admin",
+      "body": "<p class=\"no-margin\">Hi, let me look into this for you</p>",
+      "created_at": "2026-02-20T08:05:48.000Z"
+    },
+    {
+      "author": "Benji",
+      "author_type": "admin",
+      "body": "<p class=\"no-margin\"><a class=\"entity_mention intercom-content-link\" href=\"//app.intercom.com/apps/gfpnvl6f/admin/9434696\" rel=\"nofollow noopener noreferrer\" target=\"_blank\">Jackie L</a> this guys reset didn't work</p>",
+      "created_at": "2026-02-20T08:09:14.000Z"
+    },
+    {
+      "author": "user",
+      "author_type": "user",
+      "body": "<p>Let me know as soon as possible, I already want to use my base card</p>",
+      "created_at": "2026-02-20T18:26:32.000Z"
+    },
+    {
+      "author": "user",
+      "author_type": "user",
+      "body": "<p>I checked everything and it appears that I'm verified but I can't do anything</p>",
+      "created_at": "2026-02-20T18:27:05.000Z"
+    },
+    {
+      "author": "user",
+      "author_type": "user",
+      "body": "<div class=\"intercom-container\"><img src=\"https://downloads.intercomcdn.com/i/o/gfpnvl6f/2087466841/96ca9fc13d1a9dd4caaf8fdac573/IMG_8567.png?expires=1771690500&amp;signature=377f087549f60ed60dc442aac476651db41be7380dca9eeb86b85d50f70c41c1&amp;req=diAvEc14m4lbWPMW1HO4zT5LxywVQpc6OdBgcpEv%2FMzLUeM%2FKaqLlAgfTAm1%0Ans6CoAvKywhmkD2wNOo%3D%0A\"></div>",
+      "created_at": "2026-02-20T18:28:27.000Z"
+    },
+    {
+      "author": "user",
+      "author_type": "user",
+      "body": "<div class=\"intercom-container\"><img src=\"https://downloads.intercomcdn.com/i/o/gfpnvl6f/2087467188/829d1561230d6f9e4594f082cbf7/IMG_8568.png?expires=1771690500&amp;signature=f81605a58c8a57e855cdee11e475c8969560b62aa7e8c638e87cab3285eef8ef&amp;req=diAvEc14moBXUfMW1HO4zZu9cH8jY%2BjY8Pa6aywUb7e4b9On5vAfWR%2FXNhjK%0AuIFOmJAVSsCjDhrytHQ%3D%0A\"></div>",
+      "created_at": "2026-02-20T18:28:32.000Z"
+    },
+    {
+      "author": "user",
+      "author_type": "user",
+      "body": "<p>I'm from Argentina</p>",
+      "created_at": "2026-02-20T18:28:47.000Z"
+    },
+    {
+      "author": "Benji",
+      "author_type": "admin",
+      "body": "<p>Thanks for letting us know. We've noted you're in Argentina. What would you like help with (e.g. KYC, eligibility, deposits, or something else)? Once we know, we can give you the right next steps.<br><br>- cursor MCP</p>",
+      "created_at": "2026-02-21T01:28:08.000Z"
+    },
+    {
+      "author": "Jackie L",
+      "author_type": "admin",
+      "body": "<p class=\"no-margin\">Hi there, just to check, are you unable to apply your card? Can you send a screenshot for us to take a look?</p>",
+      "created_at": "2026-02-21T10:47:53.000Z"
+    }
+  ],
+  "stats": {
+    "type": "conversation_statistics",
+    "time_to_assignment": 68400,
+    "time_to_admin_reply": null,
+    "time_to_first_close": 20710,
+    "time_to_last_close": 20710,
+    "median_time_to_reply": 12946,
+    "first_contact_reply_at": 1771436857,
+    "first_assignment_at": 1771670874,
+    "first_admin_reply_at": 1771437243,
+    "first_close_at": 1771483510,
+    "last_assignment_at": 1771670876,
+    "last_assignment_admin_reply_at": null,
+    "last_contact_reply_at": 1771612127,
+    "last_admin_reply_at": 1771670873,
+    "last_close_at": 1771483510,
+    "last_closed_by_id": 9848991,
+    "count_reopens": 1,
+    "count_assignments": 2,
+    "count_conversation_parts": 26
+  }
+}

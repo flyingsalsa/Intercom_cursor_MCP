@@ -49,13 +49,31 @@ server.tool(
 
 server.tool(
   "get_conversation",
-  "Retrieve a single Intercom conversation's full message thread by ID. Returns all messages, contact info, and stats.",
+  "Retrieve a single Intercom conversation's full message thread by ID. Returns all messages, contact info, stats, and inline image attachments.",
   {
     conversation_id: z.string().describe("The Intercom conversation ID"),
   },
   async (args) => {
-    const result = await getConversation(args, INTERCOM_API_KEY);
-    return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+    const { conversation, imageBlocks } = await getConversation(args, INTERCOM_API_KEY);
+
+    const content: Array<
+      | { type: "text"; text: string }
+      | { type: "image"; data: string; mimeType: string }
+    > = [{ type: "text", text: JSON.stringify(conversation, null, 2) }];
+
+    for (const img of imageBlocks) {
+      content.push({
+        type: "text",
+        text: `[Image from message #${img.messageIndex}${img.attachmentName ? ` — ${img.attachmentName}` : ""}]`,
+      });
+      content.push({
+        type: "image",
+        data: img.data,
+        mimeType: img.mimeType,
+      });
+    }
+
+    return { content };
   },
 );
 
