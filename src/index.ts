@@ -1,12 +1,11 @@
 import "dotenv/config";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import { z } from "zod";
 
-import { searchConversations } from "./tools/search-conversations.js";
-import { getConversation } from "./tools/get-conversation.js";
-import { getContact } from "./tools/get-contact.js";
-import { getUnrepliedConversations } from "./tools/get-unreplied-conversations.js";
+import { searchConversations, searchConversationsSchema } from "./tools/search-conversations.js";
+import { getConversation, getConversationSchema } from "./tools/get-conversation.js";
+import { getContact, getContactSchema } from "./tools/get-contact.js";
+import { getUnrepliedConversations, getUnrepliedConversationsSchema } from "./tools/get-unreplied-conversations.js";
 import { getNewMessages, getNewMessagesSchema } from "./tools/new-messages.js";
 import { draftReply, draftReplySchema } from "./tools/draft-reply.js";
 import { sendReply, sendReplySchema } from "./tools/send-reply.js";
@@ -32,15 +31,7 @@ const server = new McpServer({
 server.tool(
   "search_conversations",
   "Search and filter Intercom conversations by date, state, source type. Returns a summary list with previews.",
-  {
-    state: z.enum(["open", "closed", "snoozed"]).optional().describe("Filter by conversation state"),
-    created_after: z.string().optional().describe("ISO 8601 date — conversations created after this"),
-    created_before: z.string().optional().describe("ISO 8601 date — conversations created before this"),
-    updated_after: z.string().optional().describe("ISO 8601 date — conversations updated after this"),
-    updated_before: z.string().optional().describe("ISO 8601 date — conversations updated before this"),
-    source_type: z.enum(["email", "chat", "push", "twitter", "facebook"]).optional().describe("Filter by source"),
-    per_page: z.number().min(1).max(150).optional().describe("Results per page (default 20, max 150)"),
-  },
+  searchConversationsSchema.shape,
   async (args) => {
     const result = await searchConversations(args, INTERCOM_API_KEY);
     return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
@@ -50,9 +41,7 @@ server.tool(
 server.tool(
   "get_conversation",
   "Retrieve a single Intercom conversation's full message thread by ID. Returns all messages, contact info, stats, and inline image attachments.",
-  {
-    conversation_id: z.string().describe("The Intercom conversation ID"),
-  },
+  getConversationSchema.shape,
   async (args) => {
     const { conversation, imageBlocks } = await getConversation(args, INTERCOM_API_KEY);
 
@@ -80,9 +69,7 @@ server.tool(
 server.tool(
   "get_contact",
   "Fetch full contact data for an Intercom contact: ID, external_id, role, name, email, phone; device and app version (browser, OS, Android/iOS app/device/OS/SDK); location; timestamps; custom_attributes; tags. Often used to look for wallet addresses (e.g. starting with 0x) in custom_attributes or other fields. Use the contact ID from a conversation (e.g. conversation contact id or source author).",
-  {
-    contact_id: z.string().describe("The Intercom contact ID"),
-  },
+  getContactSchema.shape,
   async (args) => {
     const result = await getContact(args, INTERCOM_API_KEY);
     return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
@@ -92,9 +79,7 @@ server.tool(
 server.tool(
   "get_unreplied_conversations",
   "Retrieve all open Intercom conversations where the last message is from the customer (unreplied). Fetches open conversations and filters to those needing a support response.",
-  {
-    per_page: z.number().min(1).max(150).optional().describe("Max open conversations to fetch per page (default 150)"),
-  },
+  getUnrepliedConversationsSchema.shape,
   async (args) => {
     const result = await getUnrepliedConversations(args ?? {}, INTERCOM_API_KEY);
     return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
@@ -104,9 +89,7 @@ server.tool(
 server.tool(
   "get_new_messages",
   "Check for new/updated Intercom conversations since the last check. Uses a polling high-water mark. First call returns conversations from the last hour; subsequent calls return only newer ones.",
-  {
-    reset: z.boolean().optional().describe("If true, resets the high-water mark to now"),
-  },
+  getNewMessagesSchema.shape,
   async (args) => {
     const result = await getNewMessages(args, INTERCOM_API_KEY);
     return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
@@ -116,10 +99,7 @@ server.tool(
 server.tool(
   "draft_reply",
   "Draft a reply to an Intercom conversation as an internal admin note. The customer will NOT see this — review it in Intercom first, then use send_reply to deliver it.",
-  {
-    conversation_id: z.string().describe("The Intercom conversation ID"),
-    body: z.string().describe("The reply body (HTML supported)"),
-  },
+  draftReplySchema.shape,
   async (args) => {
     const result = await draftReply(args, INTERCOM_API_KEY, INTERCOM_ADMIN_ID);
     return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
@@ -129,10 +109,7 @@ server.tool(
 server.tool(
   "send_reply",
   "Send a customer-visible reply to an Intercom conversation. The customer WILL see this message immediately.",
-  {
-    conversation_id: z.string().describe("The Intercom conversation ID"),
-    body: z.string().describe("The reply body (HTML supported)"),
-  },
+  sendReplySchema.shape,
   async (args) => {
     const result = await sendReply(args, INTERCOM_API_KEY, INTERCOM_ADMIN_ID);
     return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
