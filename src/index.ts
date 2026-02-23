@@ -9,10 +9,18 @@ import { getUnrepliedConversations, getUnrepliedConversationsSchema } from "./to
 import { getNewMessages, getNewMessagesSchema } from "./tools/intercom/new-messages.js";
 import { draftReply, draftReplySchema } from "./tools/intercom/draft-reply.js";
 import { sendReply, sendReplySchema } from "./tools/intercom/send-reply.js";
+import { getUserPositions, getUserPositionsSchema } from "./tools/hyperliquid/getUserPositions.js";
+import { getUserOpenOrders, getUserOpenOrdersSchema } from "./tools/hyperliquid/getUserOpenOrders.js";
+import { getOrderHistory, getOrderHistorySchema } from "./tools/hyperliquid/getOrderHistory.js";
+import { getUserFills, getUserFillsSchema } from "./tools/hyperliquid/getUserFills.js";
+import { getAssetInfo, getAssetInfoSchema } from "./tools/hyperliquid/getAssetInfo.js";
+import { getMarketCandles, getMarketCandlesSchema } from "./tools/hyperliquid/getMarketCandles.js";
 
 const INTERCOM_API_KEY = process.env.INTERCOM_API_KEY;
 const INTERCOM_ADMIN_ID = process.env.INTERCOM_ADMIN_ID;
 const TEMPLATE_DOC_PATH = process.env.TEMPLATE_DOC_PATH ?? "./templates/responses.md";
+
+// ---------- Intercom (Customer Support management API) ------------
 
 if (!INTERCOM_API_KEY) {
   console.error("INTERCOM_API_KEY environment variable is required");
@@ -115,6 +123,80 @@ server.tool(
     return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
   },
 );
+
+// ---------- Hyperliquid (Trading Platform API) ----------
+server.tool(
+  "get_hl_user_positions",
+  "Get a user's Hyperliquid positions: size, side, entry price, liquidation price, margin, unrealized PnL. Use when the conversation is about liquidation, margin, or open positions. Pass the wallet address (e.g. from get_contact external_id).",
+  getUserPositionsSchema.shape,
+  async (args) => {
+    const result = await getUserPositions({ walletAddress: args.wallet_address, asset: args.asset });
+    return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+  },
+);
+
+server.tool(
+  "get_hl_user_open_orders",
+  "Get a user's open Hyperliquid orders including TP/SL (trigger price, trigger condition, is_position_tpsl). Use for take-profit/stop-loss or order status questions.",
+  getUserOpenOrdersSchema.shape,
+  async (args) => {
+    const result = await getUserOpenOrders({ walletAddress: args.wallet_address, asset: args.asset });
+    return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+  },
+);
+
+server.tool(
+  "get_hl_order_history",
+  "Get a user's recent Hyperliquid order history (status, trigger/TP-SL info). Use to check if an order filled or was canceled.",
+  getOrderHistorySchema.shape,
+  async (args) => {
+    const result = await getOrderHistory({
+      walletAddress: args.wallet_address,
+      asset: args.asset,
+      limit: args.limit,
+    });
+    return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+  },
+);
+
+server.tool(
+  "get_hl_user_fills",
+  "Get a user's recent Hyperliquid trade fills (price, size, fee, closed PnL). Use for trade history or execution questions.",
+  getUserFillsSchema.shape,
+  async (args) => {
+    const result = await getUserFills({
+      walletAddress: args.wallet_address,
+      asset: args.asset,
+      limit: args.limit,
+    });
+    return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+  },
+);
+
+server.tool(
+  "get_hl_asset_info",
+  "Get Hyperliquid asset info (mark price, funding, open interest). Use when the user asks about an asset's market data.",
+  getAssetInfoSchema.shape,
+  async (args) => {
+    const result = await getAssetInfo({ asset: args.asset });
+    return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+  },
+);
+
+server.tool(
+  "get_hl_market_candles",
+  "Get OHLCV candles for a Hyperliquid asset. Use for price history or chart context.",
+  getMarketCandlesSchema.shape,
+  async (args) => {
+    const result = await getMarketCandles({
+      asset: args.asset,
+      interval: args.interval,
+      limit: args.limit,
+    });
+    return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+  },
+);
+
 
 async function main() {
   const transport = new StdioServerTransport();

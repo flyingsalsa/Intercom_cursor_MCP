@@ -1,5 +1,10 @@
+import { z } from "zod";
 import { getHyperliquidClient, checkRateLimit } from "./client.js";
 import type { AssetMeta, AssetCtx } from "./types.js";
+
+export const getAssetInfoSchema = z.object({
+  asset: z.string().optional().describe("Asset symbol (e.g. ETH). If omitted, returns all assets."),
+});
 
 export interface GetAssetInfoInput {
   asset?: string;

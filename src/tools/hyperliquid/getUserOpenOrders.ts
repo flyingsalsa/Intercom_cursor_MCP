@@ -1,5 +1,11 @@
+import { z } from "zod";
 import { getHyperliquidClient, normalizeAddress, checkRateLimit } from "./client.js";
 import type { OpenOrder } from "./types.js";
+
+export const getUserOpenOrdersSchema = z.object({
+  wallet_address: z.string().describe("User wallet address (0x...)"),
+  asset: z.string().optional().describe("Filter by asset symbol"),
+});
 
 export interface GetUserOpenOrdersInput {
   walletAddress: string;

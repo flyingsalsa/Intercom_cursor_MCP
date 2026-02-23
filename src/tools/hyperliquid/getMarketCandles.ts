@@ -1,7 +1,16 @@
+import { z } from "zod";
 import { getHyperliquidClient, checkRateLimit } from "./client.js";
 import type { Candle } from "./types.js";
 
 export type CandleInterval = "1m" | "3m" | "5m" | "15m" | "30m" | "1h" | "2h" | "4h" | "8h" | "12h" | "1d" | "3d" | "1w" | "1M";
+
+const candleIntervalSchema = z.enum(["1m", "3m", "5m", "15m", "30m", "1h", "2h", "4h", "8h", "12h", "1d", "3d", "1w", "1M"]);
+
+export const getMarketCandlesSchema = z.object({
+  asset: z.string().describe("Asset symbol (e.g. ETH, BTC)"),
+  interval: candleIntervalSchema.optional().describe("Candle interval (default 15m)"),
+  limit: z.number().min(1).max(500).optional().describe("Number of candles (default 100)"),
+});
 
 export interface GetMarketCandlesInput {
   asset: string;

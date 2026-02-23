@@ -1,5 +1,12 @@
+import { z } from "zod";
 import { getHyperliquidClient, normalizeAddress, checkRateLimit } from "./client.js";
 import type { UserFill } from "./types.js";
+
+export const getUserFillsSchema = z.object({
+  wallet_address: z.string().describe("User wallet address (0x...)"),
+  asset: z.string().optional().describe("Filter by asset symbol"),
+  limit: z.number().min(1).max(500).optional().describe("Max fills to return (default 50)"),
+});
 
 export interface GetUserFillsInput {
   walletAddress: string;

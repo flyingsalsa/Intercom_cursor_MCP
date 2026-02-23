@@ -1,5 +1,12 @@
+import { z } from "zod";
 import { getHyperliquidClient, normalizeAddress, checkRateLimit } from "./client.js";
 import type { OrderStatus } from "./types.js";
+
+export const getOrderHistorySchema = z.object({
+  wallet_address: z.string().describe("User wallet address (0x...)"),
+  asset: z.string().optional().describe("Filter by asset symbol"),
+  limit: z.number().min(1).max(100).optional().describe("Max orders to return (default 50)"),
+});
 
 export interface GetOrderHistoryInput {
   walletAddress: string;

@@ -27,6 +27,12 @@ Each tool is exposed to Cursor (and any MCP client) when this server is running.
   **Do not add send_reply to the allowlist unless you are extremely sure the model is correct.**  
   If the model can call **send_reply** without human approval, it can send wrong, off-brand, or inappropriate messages directly to customers. Prefer keeping **send_reply** off the allowlist and having humans send the final reply from Intercom (or approve each use). Use **draft_reply** for AI output and only send after review.
 
+### get_new_messages — how it works
+
+The tool keeps an in-memory `lastCheckTimestamp`. On the first call (when it's `null`), it uses `now - 3600` (last hour) as the `since` value. On subsequent calls, it uses `lastCheckTimestamp` as `since`, so only conversations updated after that time are returned. After each successful fetch, it updates `lastCheckTimestamp` to now. If you pass `reset: true`, it sets the mark to now and returns nothing—useful to start fresh. The Intercom API is called with `updated_at > since` and returns up to 50 conversations.
+
+**Note:** The high-water mark is in-memory only; restarting the MCP server resets it, so the next call will again use "last hour".
+
 ## Prerequisites
 
 - [Node.js](https://nodejs.org/) (v18+)

@@ -1,4 +1,10 @@
+import { z } from "zod";
 import { getHyperliquidClient, normalizeAddress, checkRateLimit } from "./client.js";
+
+export const getUserPositionsSchema = z.object({
+  wallet_address: z.string().describe("User wallet address (0x...)"),
+  asset: z.string().optional().describe("Filter by asset symbol (e.g. ETH, BTC)"),
+});
 
 export interface GetUserPositionsInput {
   walletAddress: string;
