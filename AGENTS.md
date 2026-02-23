@@ -64,8 +64,8 @@ When you produce a final draft response for a ticket, save it to the **`response
 **Example:**
 
 ```bash
-mkdir -p ./response_draft
-echo "[YOUR_RESPONSE_TEXT]" > "./response_draft/draft_$(date +'%Y-%m-%d_%H-%M').md"
+mkdir -p ./response_drafts
+echo "[YOUR_RESPONSE_TEXT]" > "./response_drafts/draft_$(date +'%Y-%m-%d_%H-%M').md"
 ```
 
 ## 7. WORKFLOWS & PLAYBOOKS

@@ -2,13 +2,13 @@ import "dotenv/config";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 
-import { searchConversations, searchConversationsSchema } from "./tools/search-conversations.js";
-import { getConversation, getConversationSchema } from "./tools/get-conversation.js";
-import { getContact, getContactSchema } from "./tools/get-contact.js";
-import { getUnrepliedConversations, getUnrepliedConversationsSchema } from "./tools/get-unreplied-conversations.js";
-import { getNewMessages, getNewMessagesSchema } from "./tools/new-messages.js";
-import { draftReply, draftReplySchema } from "./tools/draft-reply.js";
-import { sendReply, sendReplySchema } from "./tools/send-reply.js";
+import { searchConversations, searchConversationsSchema } from "./tools/intercom/search-conversations.js";
+import { getConversation, getConversationSchema } from "./tools/intercom/get-conversation.js";
+import { getContact, getContactSchema } from "./tools/intercom/get-contact.js";
+import { getUnrepliedConversations, getUnrepliedConversationsSchema } from "./tools/intercom/get-unreplied-conversations.js";
+import { getNewMessages, getNewMessagesSchema } from "./tools/intercom/new-messages.js";
+import { draftReply, draftReplySchema } from "./tools/intercom/draft-reply.js";
+import { sendReply, sendReplySchema } from "./tools/intercom/send-reply.js";
 
 const INTERCOM_API_KEY = process.env.INTERCOM_API_KEY;
 const INTERCOM_ADMIN_ID = process.env.INTERCOM_ADMIN_ID;

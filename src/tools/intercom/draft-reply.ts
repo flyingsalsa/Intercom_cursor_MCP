@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { createIntercomClient } from "../lib/intercom-client.js";
+import { createIntercomClient } from "../../lib/intercom-client.js";
 
 export const draftReplySchema = z.object({
   conversation_id: z.string().describe("The Intercom conversation ID to draft a reply for"),

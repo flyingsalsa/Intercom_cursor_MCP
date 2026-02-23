@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { createIntercomClient, type IntercomContact } from "../lib/intercom-client.js";
+import { createIntercomClient, type IntercomContact } from "../../lib/intercom-client.js";
 
 export const getContactSchema = z.object({
   contact_id: z.string().describe("The Intercom contact ID (from conversation.contacts or source.author)"),

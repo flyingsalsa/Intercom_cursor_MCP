@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { createIntercomClient, SearchFilter } from "../lib/intercom-client.js";
+import { createIntercomClient, SearchFilter } from "../../lib/intercom-client.js";
 
 export const searchConversationsSchema = z.object({
   state: z.enum(["open", "closed", "snoozed"]).optional().describe("Filter by conversation state"),

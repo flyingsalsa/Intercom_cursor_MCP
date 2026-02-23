@@ -1,6 +1,6 @@
 import { z } from "zod";
 import axios from "axios";
-import { createIntercomClient, PartAttachment } from "../lib/intercom-client.js";
+import { createIntercomClient, PartAttachment } from "../../lib/intercom-client.js";
 
 export const getConversationSchema = z.object({
   conversation_id: z.string().describe("The Intercom conversation ID to retrieve"),

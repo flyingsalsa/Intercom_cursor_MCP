@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { createIntercomClient, PartAttachment } from "../lib/intercom-client.js";
+import { createIntercomClient, PartAttachment } from "../../lib/intercom-client.js";
 
 const CUSTOMER_AUTHOR_TYPES = ["user", "lead"];
 

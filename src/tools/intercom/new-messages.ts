@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { createIntercomClient } from "../lib/intercom-client.js";
+import { createIntercomClient } from "../../lib/intercom-client.js";
 
 export const getNewMessagesSchema = z.object({
   reset: z.boolean().optional().describe("If true, resets the high-water mark to now and returns nothing. Useful to start fresh."),
