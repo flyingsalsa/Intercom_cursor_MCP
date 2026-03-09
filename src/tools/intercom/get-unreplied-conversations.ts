@@ -24,7 +24,7 @@ export async function getUnrepliedConversations(input: GetUnrepliedConversations
     return { unreplied: [], total_open: 0 };
   }
 
-  // 2. Fetch full details for each to check last message author (batch to avoid rate limits)
+  // 2. Fetch full details for each to check last customer-visible message (notes excluded)
   const BATCH_SIZE = 10;
   const unreplied: Array<{
     id: string;
@@ -81,6 +81,9 @@ function formatAttachments(attachments?: PartAttachment[]) {
   }));
 }
 
+/** Exclude internal notes — customer doesn't see them, so they don't count as a reply. */
+const PART_TYPE_NOTE = "note";
+
 function buildMessageList(conv: {
   source: { body: string; author: { type: string; name: string }; attachments?: PartAttachment[] };
   created_at: number;
@@ -89,6 +92,7 @@ function buildMessageList(conv: {
       body: string | null;
       author: { type: string; name: string };
       created_at: number;
+      part_type?: string;
       attachments?: PartAttachment[];
     }>;
   };
@@ -104,7 +108,7 @@ function buildMessageList(conv: {
       ...(sourceAttachments && { attachments: sourceAttachments }),
     },
     ...parts
-      .filter((p) => p.body || (p.attachments && p.attachments.length > 0))
+      .filter((p) => (p.body || (p.attachments && p.attachments.length > 0)) && p.part_type !== PART_TYPE_NOTE)
       .map((p) => {
         const partAttachments = formatAttachments(p.attachments);
         return {

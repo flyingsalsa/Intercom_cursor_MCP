@@ -31,6 +31,12 @@ export interface PartAttachment {
   height?: number;
 }
 
+export interface LinkedObject {
+  id: string;
+  type: "ticket" | "conversation";
+  category?: string | null;
+}
+
 export interface IntercomConversation {
   id: string;
   title: string | null;
@@ -52,12 +58,42 @@ export interface IntercomConversation {
     }>;
   };
   statistics?: { time_to_first_human_reply: number | null; count_reopens: number };
+  custom_attributes?: Record<string, unknown>;
+  linked_objects?: {
+    type: string;
+    data: LinkedObject[];
+    total_count?: number;
+    has_more?: boolean;
+  };
+}
+
+export interface IntercomTicket {
+  id: string;
+  type: string;
+  ticket_id: string;
+  created_at: number;
+  updated_at: number;
+  open: boolean;
+  category: string;
+  ticket_type?: {
+    id: string;
+    name: string;
+    description?: string;
+    category?: string;
+    icon?: string;
+  } | null;
+  ticket_state?: { id: string; category: string; internal_label?: string; external_label?: string } | null;
+  ticket_attributes?: Record<string, unknown>;
+  contacts?: { contacts: Array<{ id: string; type: string; external_id?: string | null }> };
+  linked_objects?: { data: LinkedObject[]; total_count?: number; has_more?: boolean };
+  [key: string]: unknown;
 }
 
 export interface ConversationListResponse {
   type: string;
   conversations: IntercomConversation[];
   pages: { next?: { starting_after: string }; per_page: number; total_pages: number };
+  total_count?: number;
 }
 
 /** Contact model from Intercom Contacts API (device, version, location, etc.) */
@@ -105,12 +141,19 @@ export interface IntercomContact {
   ios_last_seen_at?: number | null;
   custom_attributes?: Record<string, unknown>;
   tags?: { data: Array<{ type: string; id: string }> };
+  referrer?: string | null;
+  utm_source?: string | null;
+  utm_medium?: string | null;
+  utm_campaign?: string | null;
+  utm_term?: string | null;
+  utm_content?: string | null;
   [key: string]: unknown;
 }
 
 export function createIntercomClient(apiKey: string): {
   searchConversations: (params: ConversationSearchParams) => Promise<ConversationListResponse>;
   getConversation: (id: string) => Promise<IntercomConversation>;
+  getTicket: (id: string) => Promise<IntercomTicket>;
   getContact: (id: string) => Promise<IntercomContact>;
   replyToConversation: (params: ReplyParams) => Promise<unknown>;
   listConversations: (updatedAfter?: number, perPage?: number, startingAfter?: string) => Promise<ConversationListResponse>;
@@ -147,6 +190,11 @@ export function createIntercomClient(apiKey: string): {
     return res.data as IntercomConversation;
   }
 
+  async function getTicket(id: string): Promise<IntercomTicket> {
+    const res = await http.get(`/tickets/${id}`);
+    return res.data as IntercomTicket;
+  }
+
   async function getContact(id: string): Promise<IntercomContact> {
     const res = await http.get(`/contacts/${id}`);
     return res.data as IntercomContact;
@@ -180,5 +228,5 @@ export function createIntercomClient(apiKey: string): {
     return res.data as ConversationListResponse;
   }
 
-  return { searchConversations, getConversation, getContact, replyToConversation, listConversations };
+  return { searchConversations, getConversation, getTicket, getContact, replyToConversation, listConversations };
 }

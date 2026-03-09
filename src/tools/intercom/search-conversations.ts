@@ -9,6 +9,7 @@ export const searchConversationsSchema = z.object({
   updated_before: z.string().optional().describe("ISO 8601 date string — only conversations updated before this date"),
   source_type: z.enum(["email", "chat", "push", "twitter", "facebook"]).optional().describe("Filter by conversation source"),
   per_page: z.number().min(1).max(150).optional().describe("Results per page (default 20, max 150)"),
+  starting_after: z.string().optional().describe("Cursor for pagination — pass starting_after from the previous response's pages.next to fetch the next page"),
 });
 
 export type SearchConversationsInput = z.infer<typeof searchConversationsSchema>;
@@ -37,12 +38,24 @@ export async function searchConversations(input: SearchConversationsInput, apiKe
   }
 
   if (filters.length === 0) {
-    const result = await client.listConversations(undefined, input.per_page);
-    return formatConversationList(result.conversations);
+    const result = await client.listConversations(undefined, input.per_page, input.starting_after);
+    return {
+      conversations: formatConversationList(result.conversations),
+      pages: result.pages,
+      total_count: result.total_count,
+    };
   }
 
-  const result = await client.searchConversations({ filters, perPage: input.per_page });
-  return formatConversationList(result.conversations);
+  const result = await client.searchConversations({
+    filters,
+    perPage: input.per_page,
+    startingAfter: input.starting_after,
+  });
+  return {
+    conversations: formatConversationList(result.conversations),
+    pages: result.pages,
+    total_count: result.total_count,
+  };
 }
 
 function formatConversationList(conversations: Array<{ id: string; title: string | null; state: string; created_at: number; updated_at: number; source: { type: string; body: string; author: { type: string; name: string; email: string } }; contacts: { contacts: Array<{ name: string; email: string }> } }>) {

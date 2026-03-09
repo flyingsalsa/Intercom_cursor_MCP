@@ -1,9 +1,19 @@
 import { z } from "zod";
 import axios from "axios";
 import { createIntercomClient, PartAttachment } from "../../lib/intercom-client.js";
+import { shapeContact } from "./get-contact.js";
+import { shapeTicket } from "./get-ticket.js";
 
 export const getConversationSchema = z.object({
   conversation_id: z.string().describe("The Intercom conversation ID to retrieve"),
+  include_ticket_data: z
+    .boolean()
+    .optional()
+    .describe("When true, fetches ticket data if this conversation is a ticket. Adds is_ticket and ticket (ticket_type, ticket_attributes, etc.) to the response."),
+  include_contact_data: z
+    .boolean()
+    .optional()
+    .describe("When true, fetches full contact data (wallet_address, device, custom_attributes, etc.) and adds contact_full to the response."),
 });
 
 export type GetConversationInput = z.infer<typeof getConversationSchema>;
@@ -164,6 +174,32 @@ export async function getConversation(input: GetConversationInput, apiKey: strin
     ...partMessages,
   ];
 
+  let ticketData: { is_ticket?: boolean; ticket?: ReturnType<typeof shapeTicket> } = {};
+
+  if (input.include_ticket_data) {
+    try {
+      const t = await client.getTicket(input.conversation_id);
+      ticketData = { is_ticket: true, ticket: shapeTicket(t) };
+    } catch (err) {
+      const status = axios.isAxiosError(err) ? err.response?.status : undefined;
+      if (status !== 404) throw err;
+      ticketData = { is_ticket: false };
+    }
+  }
+
+  let contactData: { contact_full?: ReturnType<typeof shapeContact> } = {};
+
+  if (input.include_contact_data && conv.contacts.contacts[0]?.id) {
+    try {
+      const c = await client.getContact(conv.contacts.contacts[0].id);
+      contactData = { contact_full: shapeContact(c) };
+    } catch (err) {
+      const status = axios.isAxiosError(err) ? err.response?.status : undefined;
+      if (status !== 404) throw err;
+      // Silently omit contact_full on other errors to avoid failing the whole fetch
+    }
+  }
+
   const conversation = {
     id: conv.id,
     title: conv.title,
@@ -180,6 +216,16 @@ export async function getConversation(input: GetConversationInput, apiKey: strin
       : null,
     messages,
     stats: conv.statistics ?? null,
+    ...(conv.custom_attributes && Object.keys(conv.custom_attributes).length > 0 && { custom_attributes: conv.custom_attributes }),
+    ...(conv.linked_objects?.data?.length && {
+      linked_objects: {
+        data: conv.linked_objects.data,
+        total_count: conv.linked_objects.total_count,
+        has_more: conv.linked_objects.has_more,
+      },
+    }),
+    ...ticketData,
+    ...contactData,
   };
 
   return { conversation, imageBlocks };

@@ -1,5 +1,5 @@
 node_modules/
 dist/
 .env
-/templates/responses.md
-response_drafts/
+response_draft/
+scripts/
